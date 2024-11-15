@@ -1,4 +1,4 @@
-﻿unit Calculator;
+unit Calculator;
 
 interface
 
@@ -12,6 +12,21 @@ uses
 
 type
   TForm1 = class(TForm)
+
+    RadioButton_degrees: TRadioButton;
+    RadioButton_radians: TRadioButton;
+
+    Window_plus_minus: TEdit;
+    Button_change: TButton;
+    Window_radix: TEdit;
+    Button_redix: TButton;
+
+    Button_simto: TButton;
+    Button_round: TButton;
+    Button_trunc: TButton;
+
+    Y: TLabel;
+    X: TLabel;
 
     Window_main: TEdit;
     Window_echo: TEdit;
@@ -29,70 +44,70 @@ type
     Button_9: TButton;
 
     Button_dot: TButton;
-    Button_equals: TButton;
-
-    Button_plus: TButton;
-    Button_minus: TButton;
-    Button_multiply: TButton;
-    Button_divid: TButton;
-
     Button_plus_minus: TButton;
+
+    Button_pi: TButton;
+    Button_e: TButton;
+    Button_random: TButton;
 
     Button_clear_all: TButton;
     Button_clear: TButton;
     Button_backspace: TButton;
-    Button_factorial: TButton;
-    Button_power: TButton;
-    Button_root: TButton;
-    Y: TLabel;
-    X: TLabel;
+    Button_swap: TButton;
+
     Button_square: TButton;
     Button_square_root: TButton;
-    Button_pi: TButton;
-    Button_abs: TButton;
-    Button_random: TButton;
-    Button_lg: TButton;
-    Button_log: TButton;
-    Button_ln: TButton;
-    Button_log2: TButton;
-    Button_hex: TButton;
-    Button_e: TButton;
     Button_exp: TButton;
-    Button_redix: TButton;
-    Window_radix: TEdit;
+
+    Button_ln: TButton;
+    Button_lg: TButton;
+    Button_log2: TButton;
+
+    Button_abs: TButton;
+    Button_factorial: TButton;
+
+    Button_hex: TButton;
     Button_bin: TButton;
     Button_abin: TButton;
-    Button_max: TButton;
-    Button_min: TButton;
+
     Button_sin: TButton;
     Button_cos: TButton;
-    RadioButton_degrees: TRadioButton;
-    RadioButton_radians: TRadioButton;
     Button_tg: TButton;
-    Button_avg: TButton;
-    Button_round: TButton;
-    Button_trunc: TButton;
-    Button_simto: TButton;
-    Button_or: TButton;
-    Button_xor: TButton;
-    Button_and: TButton;
-    Button_not: TButton;
-    Button_mod: TButton;
-    Button_div: TButton;
-    Button_shr: TButton;
-    Button_shl: TButton;
     Button_arcsin: TButton;
     Button_arccos: TButton;
     Button_arctg: TButton;
-    Window_plus_minus: TEdit;
-    Button_change: TButton;
+
+    Button_not: TButton;
+    Button_and: TButton;
+    Button_or: TButton;
+    Button_xor: TButton;
+    Button_shr: TButton;
+    Button_shl: TButton;
+
+    Button_plus: TButton;
+    Button_minus: TButton;
+    Button_multiply: TButton;
+
+    Button_divid: TButton;
+    Button_div: TButton;
+    Button_mod: TButton;
+
+    Button_power: TButton;
+    Button_root: TButton;
+    Button_log: TButton;
+
+    Button_max: TButton;
+    Button_avg: TButton;
+    Button_min: TButton;
+
     Button_hypotenuse: TButton;
     Button_cathet: TButton;
     Button_quad: TButton;
-    Button_swap: TButton;
 
-    procedure RadioButton_degreesClick(Sender: TObject);
-    procedure RadioButton_radiansClick(Sender: TObject);
+    Button_equals: TButton;
+
+//    procedure RadioButton_degreesClick(Sender: TObject);
+//    procedure RadioButton_radiansClick(Sender: TObject);
 
     procedure Button_changeClick(Sender: TObject);
     procedure Button_redixClick(Sender: TObject);
@@ -206,8 +221,10 @@ implementation
 function Dot_check(Check: String): String;
 begin
   try
+    //Попытка перевести строку в число
     Check := FloatToStr(StrToFloat(Check));
   except
+    //Если возникает ошибка, то '.' меняется на ','
     on EConvertError
     do Check := StringReplace(Check, '.', ',', []);
   end;
@@ -217,6 +234,7 @@ end;
 //Проверка целочисленности
 function Integrt_check(Check: String): Boolean;
 begin
+  //Если есть ',' или '.', то False, иначе True
   if (Pos(',', Check) > 0)
   or (Pos('.', Check) > 0)
   then Result := False
@@ -224,8 +242,9 @@ begin
 end;
 
 //Проверка целочисленности и положительности
-function Positive_int(Check: String): Boolean;
+function Natural(Check: String): Boolean;
 begin
+  //Если есть '-', то False, иначе True
   if (Pos('-', Check) = 0)
   and Integrt_check(Check)
   then Result := True
@@ -237,7 +256,7 @@ end;
 //------------------------------------------------------------------------------
 // \/ Кнопки выбора вида данных для тригонометрических функций
 
-//Градусы
+{Градусы
 procedure TForm1.RadioButton_degreesClick(Sender: TObject);
 begin
   RadioButton_degrees.Checked := True;
@@ -249,16 +268,19 @@ procedure TForm1.RadioButton_radiansClick(Sender: TObject);
 begin
   RadioButton_radians.Checked := True;
   RadioButton_degrees.Checked := False;
-end;
+end;}
 
 // /\ Кнопки выбора вида данных для тригонометрических функций
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 // \/ Кнопки округления
 
-//Смена положительности/отрицательности числа
+//Смена положительности/отрицательности значения Redix для SimTo
 procedure TForm1.Button_changeClick(Sender: TObject);
 begin
+  {'+' и '-' для SimTo,
+   положительность или отрицательность степени 10
+   для округления}
   if Window_plus_minus.Text = '-'
   then Window_plus_minus.Text := '+'
   else Window_plus_minus.Text := '-';
@@ -269,16 +291,12 @@ end;
  работает в связке функцией выше}
 procedure TForm1.Button_redixClick(Sender: TObject);
 begin
-  if Positive_int(Window_main.Text) then
-    begin
-      Window_echo.Text := 'Нужно целое число ≥ 1';
-      Window_main.Text := '0';
-    end
-    else
+  if Natural(Window_main.Text) then
     begin
       Window_radix.Text := Window_main.Text;
       Window_main.Text := '0';
-    end;
+    end
+    else Window_echo.Text := 'Нужно целое число ≥ 0';
 end;
 
 //Математическое округление с учетом процедуры выше
@@ -291,6 +309,7 @@ begin
 end;
 
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
 
 //Банковское округление
 procedure TForm1.Button_roundClick(Sender: TObject);
@@ -383,16 +402,16 @@ begin
 end;
 
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-//Кнопки знаков и констант
+//Кнопки знаков
 
 //Дробная точка (запятая) (.)
 procedure TForm1.Button_dotClick(Sender: TObject);
 begin
-  if Pos('.', Window_main.Text) = 0
+  if Integrt_check(Window_main.Text) = True
     then Window_main.Text := Window_main.Text + '.';
 end;
 
-//Смена положительности/отрецательности (+-)
+//Смена положительности/отрецательности (±)
 procedure TForm1.Button_plus_minusClick(Sender: TObject);
 begin
   Window_main.Text := Dot_check(Window_main.Text);
@@ -400,6 +419,15 @@ begin
     then Window_main.Text := IntToStr(-1*StrToInt(Window_main.Text))
     else Window_main.Text := FloatToStr(-1*StrToFloat(Window_main.Text));
 end;
+
+//Модуль (|y|)
+procedure TForm1.Button_absClick(Sender: TObject);
+begin
+  Window_main.Text := FloatToStr(Abs(StrToFloat(Window_main.Text)));
+end;
+
+//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+//Кнопки констант
 
 //(π)
 procedure TForm1.Button_piClick(Sender: TObject);
@@ -493,13 +521,13 @@ end;
 
 procedure TForm1.Button_square_rootClick(Sender: TObject);
 begin
-if StrToFloat(Window_main.Text) > -1
+if StrToFloat(Window_main.Text) >= 0
   then
     begin
       Uno_oper('√');
       Window_main.Text := FloatToStr(Sqrt(StrToFloat(Window_main.Text)));
     end
-  else Window_echo.Text := 'Нужно число > 0';
+  else Window_echo.Text := 'Нужно число ≥ 0';
 
 end;
 
@@ -510,7 +538,7 @@ begin
 end;
 
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-//Кнопки логарифмичных унарных действий (lg; ln; log₂)
+//Кнопки логарифмических унарных действий (lg; ln; log₂)
 
 procedure TForm1.Button_lgClick(Sender: TObject);
 begin
@@ -519,7 +547,7 @@ if StrToFloat(Window_main.Text) > 0 then
     Uno_oper('lg');
     Window_main.Text := FloatToStr(Log10(StrToFloat(Window_main.Text)))
   end
-else Window_echo.Text := 'Нужно число ≥ 0';
+else Window_echo.Text := 'Нужно число > 0';
 end;
 
 procedure TForm1.Button_lnClick(Sender: TObject);
@@ -529,7 +557,7 @@ if StrToFloat(Window_main.Text) > 0 then
     Uno_oper('ln');
     Window_main.Text := FloatToStr(Ln(StrToFloat(Window_main.Text)));
   end
-  else Window_echo.Text := 'Нужно число ≥ 0';
+  else Window_echo.Text := 'Нужно число > 0';
 end;
 
 procedure TForm1.Button_log2Click(Sender: TObject);
@@ -540,39 +568,27 @@ if StrToFloat(Window_main.Text) > 0 then
     Uno_oper('log₂');
     Window_main.Text := FloatToStr(Log2(StrToFloat(Window_main.Text)));
   end
-  else Window_echo.Text := 'Нужно число ≥ 0';
+  else Window_echo.Text := 'Нужно число > 0';
 end;
 
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-//Кнопки модуля и факториала (|y|; !)
-
-procedure TForm1.Button_absClick(Sender: TObject);
-begin
-  Uno_oper('|y|');
-  Window_main.Text := FloatToStr(Abs(StrToFloat(Window_main.Text)));
-end;
+//Кнопка факториала (!)
 
 //(!)
 procedure TForm1.Button_factorialClick(Sender: TObject);
-var I, J, F: Integer;
+var I, F: Integer;
 begin
-  if Positive_int(Window_main.Text) then
+  if Natural(Window_main.Text) then
     begin
       Window_echo.Text := Window_main.Text + '!';
       if (Window_main.Text = '0')
       or (Window_main.Text = '1')
       then Window_main.Text := '1'
       else
-        begin
-          if Window_main.Text = '2'
-          then Window_main.Text := '2'
-          else
-            begin;
-              F := 1;
-              J := StrToInt(Window_echo.Text);
-              for I := 1 to J do F := F*I;
-              Window_main.Text := IntToStr(F)
-            end;
+        begin;
+          F := 1;
+          for I := 2 to StrToInt(Window_main.Text) do F := F*I;
+          Window_main.Text := IntToStr(F)
         end;
     end
   else Window_echo.Text := 'Нужно целое число ≥ 0';
@@ -600,7 +616,7 @@ end;
  используя функцию, прописанную в библиотеке 'CE_l_lBinUnit'}
 procedure TForm1.Button_binClick(Sender: TObject);
 begin
-  if Positive_int(Window_main.Text) then
+  if Natural(Window_main.Text) then
     begin
       Window_echo.Text := Window_main.Text + '₁₀ = '
                           + IntToBin(StrToInt(Window_main.Text),
@@ -616,8 +632,9 @@ procedure TForm1.Button_abinClick(Sender: TObject);
 begin
   if BinToInt(StrToInt(Window_main.Text)) > -1 then
     begin
-      Window_echo.Text := Window_main.Text + '₂ = Y₁₀';
+      Window_echo.Text := Window_main.Text + '₂ -> ₁₀';
       Window_main.Text := IntToStr(BinToInt(StrToInt(Window_main.Text)));
+      Window_sign.Text := '='
     end
   else Window_echo.Text := Window_main.Text + ' не бинарно';
 end;
@@ -627,64 +644,54 @@ end;
 
 procedure TForm1.Button_sinClick(Sender: TObject);
 begin
+  Uno_oper('sin');
   if RadioButton_degrees.Checked = True then
     begin
-      Window_echo.Text := 'sin' + Window_main.Text + '°';
+      Window_echo.Text := Window_echo.Text + '°';
       Window_main.Text := FloatToStr(Sin(StrToFloat(Window_main.Text)
                                          *Pi/180));
-      Window_sign.Text := '=';
     end
-  else
-    begin
-      Uno_oper('sin');
-      Window_main.Text := FloatToStr(Sin(StrToFloat(Window_main.Text)));
-    end;
+  else Window_main.Text := FloatToStr(Sin(StrToFloat(Window_main.Text)));
+  if (StrToFloat(Window_main.Text) < 0.0001)
+  and (StrToFloat(Window_main.Text) > -0.0001)
+  then Window_main.Text := '0';
 end;
 
 procedure TForm1.Button_cosClick(Sender: TObject);
 begin
+  Uno_oper('cos');
   if RadioButton_degrees.Checked = True then
     begin
-      Window_echo.Text := 'cos' + Window_main.Text + '°';
+      Window_echo.Text := Window_echo.Text + '°';
       Window_main.Text := FloatToStr(Cos(StrToFloat(Window_main.Text)
                                          *Pi/180));
-      Window_sign.Text := '=';
     end
-    else
-    begin
-      Uno_oper('cos');
-      Window_main.Text := FloatToStr(Cos(StrToFloat(Window_main.Text)));
-    end;
+    else Window_main.Text := FloatToStr(Cos(StrToFloat(Window_main.Text)));
+    if (StrToFloat(Window_main.Text) < 0.0001)
+    and (StrToFloat(Window_main.Text) > -0.0001)
+    then Window_main.Text := '0';
 end;
 
 procedure TForm1.Button_tgClick(Sender: TObject);
 begin
+  Uno_oper('tg');
   if RadioButton_degrees.Checked = True then
     begin
+      Window_echo.Text := Window_echo.Text + '°';
       if (Round(StrToFloat(Window_main.Text)) mod 90 = 0)
       and (Round(StrToFloat(Window_main.Text)) mod 20 <> 0)
-      then Window_echo.Text := 'tg' + Window_main.Text
-                               + '° -- Неопределен'
-      else
-        begin
-          Window_echo.Text := 'tg' + Window_main.Text + '°';
-          Window_main.Text :=
-            FloatToStr(Tan(StrToFloat(Window_main.Text)*Pi/180));
-        end;
+      then Window_echo.Text := Window_echo.Text + ' — Неопределен'
+      else Window_main.Text :=
+             FloatToStr(Tan(StrToFloat(Window_main.Text)*Pi/180));
     end
     else
     begin
       if ((Round(StrToFloat(Window_main.Text)*180/Pi)) mod 90 = 0)
       and ((Round(StrToFloat(Window_main.Text)*180/Pi)) mod 20 <> 0)
       then Window_echo.Text := 'tg' + Copy(Window_main.Text, 1, 5)
-                               + ' -- Неопределен'
-      else
-       begin
-          Window_echo.Text := 'tg' + Window_main.Text;
-          Window_main.Text := FloatToStr(Tan(StrToFloat(Window_main.Text)));
-        end;
+                               + ' — Неопределен'
+      else Window_main.Text := FloatToStr(Tan(StrToFloat(Window_main.Text)));
     end;
-  Window_sign.Text := '=';
 end;
 
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -695,14 +702,12 @@ begin
   if (-1 <= StrToFloat(Window_main.Text))
   and (StrToFloat(Window_main.Text) <= 1) then
   begin
-    Window_echo.Text := 'ArcSin' + Window_main.Text;
+    Uno_oper('ArcSin');
     if RadioButton_degrees.Checked = True
-    then
-      Window_main.Text := FloatToStr((Arcsin
-                                     (StrToFloat(Window_main.Text)))/Pi*180)
+    then Window_main.Text := FloatToStr((Arcsin
+                                        (StrToFloat(Window_main.Text)))/Pi*180)
     else
       Window_main.Text := FloatToStr(Arcsin(StrToFloat(Window_main.Text)));
-    Window_sign.Text := '=';
   end
   else
     Window_echo.Text := 'Число должно быть ≥ -1 и ≤ 1';
@@ -713,31 +718,25 @@ begin
   if (-1 <= StrToFloat(Window_main.Text))
   and (StrToFloat(Window_main.Text) <= 1)
   then
-    begin
-      Window_echo.Text := 'ArcCos' + Window_main.Text;
-      if RadioButton_degrees.Checked = True
-        then
-          Window_main.Text := FloatToStr((Arccos
-                              (StrToFloat(Window_main.Text)))/Pi*180)
-        else
-          Window_main.Text := FloatToStr(Arccos
-                                         (StrToFloat(Window_main.Text)));
-      Window_sign.Text := '='
-    end
+  begin
+  Uno_oper('ArcCin');
+    if RadioButton_degrees.Checked = True
+    then Window_main.Text := FloatToStr((Arccos
+                                        (StrToFloat(Window_main.Text)))/Pi*180)
+    else
+      Window_main.Text := FloatToStr(Arccos(StrToFloat(Window_main.Text)));
+  end
   else
     Window_echo.Text := 'Число должно быть ≥ -1 и ≤ 1';
 end;
 
 procedure TForm1.Button_arctgClick(Sender: TObject);
 begin
-  Window_echo.Text := 'ArcTg' + Window_main.Text;
+  Uno_oper('ArcTg');
   if RadioButton_degrees.Checked = True
-  then
-    Window_main.Text := FloatToStr((Arctan
-                                   (StrToFloat(Window_main.Text)))/Pi*180)
-  else
-    Window_main.Text := FloatToStr(Arctan(StrToFloat(Window_main.Text)));
-  Window_sign.Text := '=';
+  then Window_main.Text := FloatToStr((Arctan
+                                      (StrToFloat(Window_main.Text)))/Pi*180)
+  else Window_main.Text := FloatToStr(Arctan(StrToFloat(Window_main.Text)));
 end;
 
 // /\ Унарные математические опирации
@@ -758,11 +757,7 @@ begin
       Uno_oper('Not');
       Window_main.Text := IntToStr(Not(StrToInt(Window_main.Text)));
     end
-  else
-    begin
-      Window_echo.Text := 'Нужно целое число';
-      Window_main.Text := '0';
-    end;
+  else Window_echo.Text := 'Нужно целое число';
 end;
 
 // /\ Унарные логические опирации
@@ -888,7 +883,7 @@ end;
 
 procedure TForm1.Button_logClick(Sender: TObject);
 begin
-if (StrToFloat(Window_main.Text) > -1)
+if (StrToFloat(Window_main.Text) > 0)
 and (Window_main.Text <> '1')
   then Bin_oper('logᵧx')
   else Window_echo.Text := 'Нужно число > 0 и ≠ 1';
@@ -1041,7 +1036,7 @@ begin
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   //(/; div; mod)
 
-  if Pos(Window_sign.Text, '/ div mod') > 0 then
+  if Pos(Window_sign.Text, '/ Div Mod') > 0 then
     begin
       if  Window_main.Text = '0' then
         begin
@@ -1058,36 +1053,40 @@ begin
               Window_main.Text := FloatToStr(StrToFloat(Window_echo.Text)
                                              / StrToFloat(Window_main.Text));
               Window_echo.Text := Window_echo.Text + '/' + Window_sign.Text
-            end;
-
-          if Integrt_check(Window_main.Text) then
-            begin
-
-              //(Div)
-              if Window_sign.Text = 'Div' then
-                begin
-                  Window_sign.Text := Window_main.Text;
-                  Window_main.Text := IntToStr(StrToInt(Window_echo.Text)
-                                               div StrToInt(Window_main.Text));
-                  Window_echo.Text := Window_echo.Text
-                                      + 'div' + Window_sign.Text;
-                end;
-
-              //(Mod)
-              if Window_sign.Text = 'Mod' then
-                begin
-                  Window_sign.Text := Window_main.Text;
-                  Window_main.Text := IntToStr(StrToInt(Window_echo.Text)
-                                               mod StrToInt(Window_main.Text));
-                  Window_echo.Text := Window_echo.Text
-                                      + 'mod' + Window_sign.Text;
-                end;
             end
-
           else
             begin
-              Window_main.Text := Window_echo.Text;
-              Window_echo.Text := 'Нужно целое число';
+            if Integrt_check(Window_main.Text) then
+              begin
+
+                //(Div)
+                if Window_sign.Text = 'Div' then
+                  begin
+                    Window_sign.Text := Window_main.Text;
+                    Window_main.Text := IntToStr(
+                                          StrToInt(Window_echo.Text)
+                                          div StrToInt(Window_main.Text));
+                    Window_echo.Text := Window_echo.Text
+                                        + 'div' + Window_sign.Text;
+                  end;
+
+                //(Mod)
+                if Window_sign.Text = 'Mod' then
+                  begin
+                    Window_sign.Text := Window_main.Text;
+                    Window_main.Text := IntToStr(
+                                          StrToInt(Window_echo.Text)
+                                          mod StrToInt(Window_main.Text));
+                    Window_echo.Text := Window_echo.Text
+                                        + 'mod' + Window_sign.Text;
+                  end;
+              end
+
+            else
+              begin
+                Window_main.Text := Window_echo.Text;
+                Window_echo.Text := 'Нужно целое число';
+              end;
             end;
         end;
     Window_sign.Text := '=';
@@ -1204,8 +1203,6 @@ begin
               Window_echo.Text := '√(' + Window_echo.Text + '²'
                                   + '-' + Window_sign.Text + '²)';
             end;
-          if StrToFloat(Window_main.Text) <= 0
-          then Window_echo.Text := 'Это не п/у треугольник';
         end;
 
       if Window_sign.Text = 'Hptn' then
@@ -1215,8 +1212,6 @@ begin
                                   + sqr(StrToFloat(Window_echo.Text))));
               Window_echo.Text := '√(' + Window_sign.Text + '²'
                                   + '+' + Window_echo.Text + '²)';
-          if StrToFloat(Window_main.Text) <= 0
-          then Window_echo.Text := 'Это не п/у треугольник';
         end;
 
       if Window_sign.Text = 'Quad' then
