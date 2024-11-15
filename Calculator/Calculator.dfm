@@ -183,6 +183,7 @@ object Form1: TForm1
     Top = 40
     Width = 152
     Height = 23
+    ReadOnly = True
     TabOrder = 17
     Text = '0'
   end
@@ -191,6 +192,7 @@ object Form1: TForm1
     Top = 8
     Width = 152
     Height = 23
+    ReadOnly = True
     TabOrder = 18
   end
   object Window_sign: TEdit
@@ -198,6 +200,7 @@ object Form1: TForm1
     Top = 8
     Width = 40
     Height = 23
+    ReadOnly = True
     TabOrder = 19
   end
   object Button_clear_all: TButton
@@ -476,7 +479,6 @@ object Form1: TForm1
     Height = 24
     Caption = 'Round'
     TabOrder = 50
-    OnClick = Button_roundClick
   end
   object Button_trunc: TButton
     Left = 488
@@ -485,7 +487,6 @@ object Form1: TForm1
     Height = 24
     Caption = 'Trunc'
     TabOrder = 51
-    OnClick = Button_truncClick
   end
   object Button_simto: TButton
     Left = 488
