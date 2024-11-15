@@ -3,9 +3,9 @@ unit CE_l_lBin;
 interface
 
 uses
-// Библиотека с IntToStr, StringReplace...
+// Р‘РёР±Р»РёРѕС‚РµРєР° СЃ IntToStr, StringReplace...
   System.SysUtils,
-// Библиотека с Power...
+// Р‘РёР±Р»РёРѕС‚РµРєР° СЃ Power...
   Math;
 
 function IntToBin(Number, Radix: Integer): String;
@@ -13,11 +13,11 @@ function BinToInt(Number: Integer): Integer;
 
 implementation
 
-//Бинарные функции
+//Р‘РёРЅР°СЂРЅС‹Рµ С„СѓРЅРєС†РёРё
 
-{Функции перевода числа из 10-ричной в 2-ичную систему.}
+{Р¤СѓРЅРєС†РёРё РїРµСЂРµРІРѕРґР° С‡РёСЃР»Р° РёР· 10-СЂРёС‡РЅРѕР№ РІ 2-РёС‡РЅСѓСЋ СЃРёСЃС‚РµРјСѓ.}
 
-{10 в 2}
+{10 РІ 2}
 
 function IntToBin(Number, Radix: Integer): String;
   var Res: String;
@@ -31,9 +31,9 @@ begin
   Result := Res;
 end;
 
-{2 в 10, с обработкой ошибки,
- если переводят не двоичную запись,
- в данном случае результат будет -1}
+{2 РІ 10, СЃ РѕР±СЂР°Р±РѕС‚РєРѕР№ РѕС€РёР±РєРё,
+ РµСЃР»Рё РїРµСЂРµРІРѕРґСЏС‚ РЅРµ РґРІРѕРёС‡РЅСѓСЋ Р·Р°РїРёСЃСЊ,
+ РІ РґР°РЅРЅРѕРј СЃР»СѓС‡Р°Рµ СЂРµР·СѓР»СЊС‚Р°С‚ Р±СѓРґРµС‚ -1}
 
 function BinToInt(Number: Integer): Integer;
 var I, Res: Integer;
@@ -55,6 +55,6 @@ begin
     else Result := -1;
 end;
 
-// Бинарные функции
+// Р‘РёРЅР°СЂРЅС‹Рµ С„СѓРЅРєС†РёРё
 
 end.
